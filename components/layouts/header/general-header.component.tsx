@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
-import { UserToken, useAuth } from "context/AuthContext";
+import { useAuth } from "context/AuthContext";
 import Cookies from "js-cookie";
 import router from "next/router";
 import { useTheme } from "@mui/material/styles";
@@ -24,10 +24,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 type Props = {
   variant?: "simple" | "general";
-  user?: UserToken | null
 };
 
-const Header: FC<Props> = ({ variant, user }: Props) => {
+const Header: FC<Props> = ({ variant }: Props) => {
+  const { user } = useAuth();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -77,12 +77,14 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
               {user && (
                 <>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <NextLink href="/actualizacion-perfil">
                     <Image
                       src="/perfil.png"
                       width={30}
                       height={30}
                       alt="Perfil"
                     />
+                    </NextLink>
                     <Typography
                       variant="body2"
                       sx={{
@@ -115,7 +117,7 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
               open={isDrawerOpen}
               onClose={handleDrawerClose}
               sx={{
-                width: 206,
+                width: 206, 
               }}
             >
               <List>
@@ -183,7 +185,7 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
                   <>
                     {/* Lista para usuarios logueados distintos de ADMIN*/}
                     <ListItem button>
-                      <NextLink href="/" passHref>
+                      <NextLink href="/proyectos-generales" passHref>
                         <MUILink
                           variant="body2"
                           sx={{ color: "black", fontSize: 14, fontWeight: 400 }}
@@ -246,7 +248,7 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
                   <>
                     {/* Lista para usuarios ADMIN */}
                     <ListItem button>
-                      <NextLink href="/" passHref>
+                      <NextLink href="/proyectos-generales" passHref>
                         <MUILink
                           variant="body2"
                           sx={{ color: "black", fontSize: 14, fontWeight: 400 }}
@@ -296,7 +298,7 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
           </>
         ) : (
           <>
-            <NextLink href="/" passHref>
+            <NextLink href="/proyectos-generales" passHref>
               <MUILink
                 variant="body2"
                 sx={{
@@ -401,7 +403,7 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
                     </MUILink>
                   </NextLink>
                 )}
-                <NextLink href="/" passHref>
+                <NextLink href="/actualizacion-perfil" passHref>
                   <Image
                     src="/perfil.png"
                     width={45}
@@ -448,13 +450,13 @@ const Header: FC<Props> = ({ variant, user }: Props) => {
   );
 };
 
-const GeneralHeader: FC<Props> = ({ variant, user }: Props) => {
+const GeneralHeader: FC<Props> = ({ variant }: Props) => {
   return variant == "general" ? (
     <AppBar position="static">
-      <Header variant={variant} user={user} />
+      <Header variant={variant} />
     </AppBar>
   ) : (
-    <Header variant={variant} user={user} />
+    <Header variant={variant} />
   );
 };
 
